@@ -83,7 +83,7 @@ function submit() {
     date: form.date,
     notes: form.notes.trim(),
   })
-
+  router.push('/collection')
   form.name = ''
   form.category = 'Bird'
   form.location = ''

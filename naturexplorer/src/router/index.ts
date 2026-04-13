@@ -12,5 +12,4 @@ const router = createRouter({
     { path: '/collection', component: () => import('../views/CollectionView.vue')}
   ],
 })
-
 export default router
