@@ -9,6 +9,7 @@ const router = createRouter({
     { path: '/log-species', component: () => import('../views/LogSpeciesView.vue') },
     { path: '/explore', component: () => import('../views/ExploreView.vue') },
     { path: '/account', component: () => import('../views/AccountView.vue') },
+    { path: '/collection', component: () => import('../views/CollectionView.vue')}
   ],
 })
 
