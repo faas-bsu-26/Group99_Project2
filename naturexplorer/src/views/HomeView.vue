@@ -6,19 +6,19 @@ const router = useRouter()
 const navItems = [
   {
     label: "Today's Activities",
-    icon: '☀️',
+    image: '/activities.png',
     route: '/activities',
     description: "See what's happening today",
   },
   {
     label: 'Log Species',
-    icon: '🌿',
+    image: '/leaf.png',
     route: '/log-species',
     description: 'Record a new sighting',
   },
   {
     label: 'Explore',
-    icon: '🗺️',
+    image: '/map.png',
     route: '/explore',
     description: 'Discover nearby nature',
   },
@@ -41,7 +41,9 @@ const navItems = [
           class="nav-btn"
           @click="router.push(item.route)"
         >
-          <span class="btn-icon">{{ item.icon }}</span>
+          <span class="btn-icon">
+            <img :src="item.image" :alt="item.label" class="btn-icon-img" />
+          </span>
           <span class="btn-content">
             <span class="btn-label">{{ item.label }}</span>
             <span class="btn-desc">{{ item.description }}</span>
@@ -106,7 +108,6 @@ const navItems = [
   font-weight: 400;
 }
 
-/* ── Nav buttons ── */
 .nav {
   display: flex;
   flex-direction: column;
@@ -160,8 +161,6 @@ const navItems = [
 }
 
 .btn-icon {
-  font-size: 28px;
-  line-height: 1;
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -170,6 +169,13 @@ const navItems = [
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.btn-icon-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .btn-content {
