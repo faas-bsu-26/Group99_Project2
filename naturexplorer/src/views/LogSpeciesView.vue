@@ -13,6 +13,7 @@ interface SpeciesEntry {
   location: string
   date: string
   notes: string
+  image: string
 }
 
 const categories: Category[] = ['Bird', 'Plant', 'Mammal', 'Insect', 'Reptile', 'Fungi', 'Other']
@@ -29,6 +30,7 @@ const entries = ref<SpeciesEntry[]>([
     location: 'Riverside Trail, Oak Park',
     date: '2026-04-12',
     notes: 'Spotted circling above the meadow, likely hunting. Distinct rusty tail visible in sunlight.',
+    image: '/red-tail-hawk.webp',
   },
   {
     id: 2,
@@ -37,6 +39,7 @@ const entries = ref<SpeciesEntry[]>([
     location: 'Pine Ridge Forest',
     date: '2026-04-11',
     notes: 'Found a small cluster near a fallen oak. Golden-yellow, wavy cap edges.',
+    image: '/chantrelle.webp',
   },
   {
     id: 3,
@@ -45,6 +48,7 @@ const entries = ref<SpeciesEntry[]>([
     location: 'Backyard garden',
     date: '2026-04-10',
     notes: '',
+    image: '/eastern-cottontail.avif',
   },
   {
     id: 4,
@@ -53,6 +57,7 @@ const entries = ref<SpeciesEntry[]>([
     location: 'Creekside path, Millbrook',
     date: '2026-04-08',
     notes: 'Full bloom along the creek bank. Beautiful clusters of blue-purple tubular flowers.',
+    image: '/virginia-bluebells.webp',
   },
 ])
 
@@ -68,6 +73,7 @@ const form = reactive({
   location: '',
   date: todayISO,
   notes: '',
+  image: '',
 })
 
 const errors = reactive({ name: false, location: false })
@@ -94,6 +100,7 @@ function submit() {
     location: form.location.trim(),
     date: form.date,
     notes: form.notes.trim(),
+    image: form.image.trim(),
   })
 
   form.name = ''
@@ -101,6 +108,7 @@ function submit() {
   form.location = ''
   form.date = todayISO
   form.notes = ''
+  form.image = ''
   closeModal()
 }
 
@@ -142,18 +150,26 @@ function formatDate(iso: string) {
 
         <div class="entry-list">
           <div v-for="entry in sortedEntries" :key="entry.id" class="entry-card">
-            <div class="entry-top">
-              <span class="entry-name">{{ entry.name }}</span>
-              <span
-                class="entry-tag"
-                :style="{ background: categoryStyle[entry.category].bg, color: categoryStyle[entry.category].color }"
-              >{{ entry.category }}</span>
+            <div class="entry-image-wrap">
+              <img v-if="entry.image" :src="entry.image" :alt="entry.name" class="entry-image" />
+              <div v-else class="entry-image-placeholder">
+                <span>🌿</span>
+              </div>
             </div>
-            <div class="entry-meta">
-              <span class="entry-location">📍 {{ entry.location }}</span>
-              <span class="entry-date">{{ formatDate(entry.date) }}</span>
+            <div class="entry-content">
+              <div class="entry-top">
+                <span class="entry-name">{{ entry.name }}</span>
+                <span
+                  class="entry-tag"
+                  :style="{ background: categoryStyle[entry.category].bg, color: categoryStyle[entry.category].color }"
+                >{{ entry.category }}</span>
+              </div>
+              <div class="entry-meta">
+                <span class="entry-location">📍 {{ entry.location }}</span>
+                <span class="entry-date">{{ formatDate(entry.date) }}</span>
+              </div>
+              <p v-if="entry.notes" class="entry-notes">{{ entry.notes }}</p>
             </div>
-            <p v-if="entry.notes" class="entry-notes">{{ entry.notes }}</p>
           </div>
         </div>
       </section>
@@ -226,6 +242,16 @@ function formatDate(iso: string) {
                   v-model="form.notes"
                   rows="3"
                   placeholder="Observations, behavior, habitat…"
+                />
+              </div>
+
+              <div class="field">
+                <label for="image">Image Filename <span class="optional">(optional)</span></label>
+                <input
+                  id="image"
+                  v-model="form.image"
+                  type="text"
+                  placeholder="e.g. /my-photo.jpg"
                 />
               </div>
             </div>
@@ -341,8 +367,43 @@ function formatDate(iso: string) {
 .entry-card {
   background: #fff;
   border-radius: 16px;
-  padding: 16px;
+  overflow: hidden;
   box-shadow: 0 2px 8px rgba(34, 84, 34, 0.08);
+  display: flex;
+  align-items: stretch;
+}
+
+.entry-image-wrap {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  align-self: center;
+  margin: 12px 0 12px 12px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.entry-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.entry-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e8f5e4, #d4edce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.entry-content {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
 }
 
 .entry-top {
