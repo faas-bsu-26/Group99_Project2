@@ -11,10 +11,10 @@ const profile = {
 
 
 const posts = [
-  { id: 1, species: 'Red-tailed Hawk',      image: '/red-tail-hawk.webp' },
-  { id: 2, species: 'Chanterelle Mushroom', image: '/chantrelle.webp' },
-  { id: 3, species: 'Virginia Bluebells',   image: '/virginia-bluebells.webp' },
-  { id: 4, species: 'Eastern Cottontail',   image: '/eastern-cottontail.avif' },
+  { id: 1, species: 'Red-tailed Hawk',      image: '/public/red-tail-hawk.webp' },
+  { id: 2, species: 'Chanterelle Mushroom', image: '/public/chantrelle.webp' },
+  { id: 3, species: 'Virginia Bluebells',   image: '/public/virginia-bluebells.webp' },
+  { id: 4, species: 'Eastern Cottontail',   image: '/public/eastern-cottontail.avif' },
 ]
 
 const events = [
