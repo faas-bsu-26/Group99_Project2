@@ -73,7 +73,7 @@ const events = [
         <div class="photo-scroll">
           <div v-for="post in posts" :key="post.id" class="photo-card">
             <div class="photo-wrap">
-              <img v-if="post.image" :src="post.image" :alt="post.species" class="photo-img" />
+              <img v-if="post.image" :src="post.image" :alt="post.species || 'species image'" class="photo-img" />
               <div v-else class="photo-placeholder">🌿</div>
             </div>
             <span class="photo-name">{{ post.species }}</span>
