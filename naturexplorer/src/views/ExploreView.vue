@@ -8,7 +8,7 @@ const router = useRouter()
     <button class="back" @click="router.push('/')">← Back</button>
     <h1>Explore</h1>
     <div class="map-container">
-      <img src="/map.png" class="map"/>
+      <img src="/public/map.png" class="map"/>
       <div class="you">You are here</div>
       <div class="pin" style="top: 30%; left: 60%;">𖠰</div>
       <div class="pin" style="top: 60%; left: 30%;">𓅓</div>
