@@ -93,7 +93,7 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
           :key="activity.id"
           class="activity-card"
           :class="{ done: activity.checked }"
-          @click="activity.checked = !activity.checked"
+          @click.self="activity.checked = !activity.checked"
         >
           <div class="checkbox" :class="{ checked: activity.checked }">
             <svg v-if="activity.checked" viewBox="0 0 12 10" fill="none">
