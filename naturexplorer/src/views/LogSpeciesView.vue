@@ -60,6 +60,8 @@ const sortedEntries = computed(() =>
   [...entries.value].sort((a, b) => (a.date < b.date ? 1 : -1))
 )
 
+const showModal = ref(false)
+
 const form = reactive({
   name: '',
   category: 'Bird' as Category,
@@ -69,6 +71,16 @@ const form = reactive({
 })
 
 const errors = reactive({ name: false, location: false })
+
+function openModal() {
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  errors.name = false
+  errors.location = false
+}
 
 function submit() {
   errors.name = !form.name.trim()
@@ -83,12 +95,13 @@ function submit() {
     date: form.date,
     notes: form.notes.trim(),
   })
-  router.push('/collection')
+
   form.name = ''
   form.category = 'Bird'
   form.location = ''
   form.date = todayISO
   form.notes = ''
+  closeModal()
 }
 
 const categoryStyle: Record<Category, { bg: string; color: string }> = {
@@ -113,78 +126,14 @@ function formatDate(iso: string) {
   <div class="page">
     <div class="container">
 
+      <!-- Header -->
       <header class="page-header">
-        <button class="back-btn" @click="router.push('/')" aria-label="Back to home">
-          <span class="back-icon">←</span>
-        </button>
+        <button class="back-btn" @click="router.push('/')" aria-label="Back to home">←</button>
         <h1 class="page-title">Log Species</h1>
-        <span class="header-spacer" />
+        <button class="log-btn" @click="openModal">+ Log</button>
       </header>
 
-      <section class="form-section">
-        <h2 class="section-title">New Sighting</h2>
-
-        <div class="field" :class="{ error: errors.name }">
-          <label for="species-name">Species Name <span class="required">*</span></label>
-          <input
-            id="species-name"
-            v-model="form.name"
-            type="text"
-            placeholder="e.g. American Robin"
-            @input="errors.name = false"
-          />
-          <span v-if="errors.name" class="error-msg">Please enter a species name.</span>
-        </div>
-
-        <div class="field">
-          <label>Category</label>
-          <div class="category-grid">
-            <button
-              v-for="cat in categories"
-              :key="cat"
-              type="button"
-              class="cat-chip"
-              :class="{ active: form.category === cat }"
-              :style="form.category === cat
-                ? { background: categoryStyle[cat].bg, color: categoryStyle[cat].color, borderColor: categoryStyle[cat].color }
-                : {}"
-              @click="form.category = cat"
-            >
-              {{ cat }}
-            </button>
-          </div>
-        </div>
-
-        <div class="field" :class="{ error: errors.location }">
-          <label for="location">Location <span class="required">*</span></label>
-          <input
-            id="location"
-            v-model="form.location"
-            type="text"
-            placeholder="e.g. Riverside Trail"
-            @input="errors.location = false"
-          />
-          <span v-if="errors.location" class="error-msg">Please enter a location.</span>
-        </div>
-
-        <div class="field">
-          <label for="sighting-date">Date</label>
-          <input id="sighting-date" v-model="form.date" type="date" />
-        </div>
-
-        <div class="field">
-          <label for="notes">Notes <span class="optional">(optional)</span></label>
-          <textarea
-            id="notes"
-            v-model="form.notes"
-            rows="3"
-            placeholder="Observations, behavior, habitat…"
-          />
-        </div>
-
-        <button class="submit-btn" @click="submit">Log Species</button>
-      </section>
-
+      <!-- Entry list -->
       <section class="list-section">
         <h2 class="section-title">
           Logged Sightings
@@ -210,10 +159,90 @@ function formatDate(iso: string) {
       </section>
 
     </div>
+
+    <!-- Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+          <div class="modal">
+            <div class="modal-header">
+              <h2 class="modal-title">New Sighting</h2>
+              <button class="close-btn" @click="closeModal" aria-label="Close">✕</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="field" :class="{ error: errors.name }">
+                <label for="species-name">Species Name <span class="required">*</span></label>
+                <input
+                  id="species-name"
+                  v-model="form.name"
+                  type="text"
+                  placeholder="e.g. American Robin"
+                  @input="errors.name = false"
+                />
+                <span v-if="errors.name" class="error-msg">Please enter a species name.</span>
+              </div>
+
+              <div class="field">
+                <label>Category</label>
+                <div class="category-grid">
+                  <button
+                    v-for="cat in categories"
+                    :key="cat"
+                    type="button"
+                    class="cat-chip"
+                    :class="{ active: form.category === cat }"
+                    :style="form.category === cat
+                      ? { background: categoryStyle[cat].bg, color: categoryStyle[cat].color, borderColor: categoryStyle[cat].color }
+                      : {}"
+                    @click="form.category = cat"
+                  >
+                    {{ cat }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="field" :class="{ error: errors.location }">
+                <label for="location">Location <span class="required">*</span></label>
+                <input
+                  id="location"
+                  v-model="form.location"
+                  type="text"
+                  placeholder="e.g. Riverside Trail"
+                  @input="errors.location = false"
+                />
+                <span v-if="errors.location" class="error-msg">Please enter a location.</span>
+              </div>
+
+              <div class="field">
+                <label for="sighting-date">Date</label>
+                <input id="sighting-date" v-model="form.date" type="date" />
+              </div>
+
+              <div class="field">
+                <label for="notes">Notes <span class="optional">(optional)</span></label>
+                <textarea
+                  id="notes"
+                  v-model="form.notes"
+                  rows="3"
+                  placeholder="Observations, behavior, habitat…"
+                />
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="cancel-btn" @click="closeModal">Cancel</button>
+              <button class="submit-btn" @click="submit">Log Species</button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
+/* ── Page shell ── */
 .page {
   min-height: 100svh;
   background: linear-gradient(160deg, #f5f0e8 0%, #ede8dc 50%, #e4ddd0 100%);
@@ -230,6 +259,7 @@ function formatDate(iso: string) {
   box-sizing: border-box;
 }
 
+/* ── Header ── */
 .page-header {
   display: flex;
   align-items: center;
@@ -254,8 +284,8 @@ function formatDate(iso: string) {
   transition: background 0.15s, color 0.15s;
 }
 
-.back-btn:active,
-.back-btn:hover {
+.back-btn:hover,
+.back-btn:active {
   background: #2d6a2d;
   color: #fff;
 }
@@ -273,6 +303,7 @@ function formatDate(iso: string) {
   flex-shrink: 0;
 }
 
+/* ── Section heading ── */
 .section-title {
   font-size: 16px;
   font-weight: 700;
@@ -296,121 +327,9 @@ function formatDate(iso: string) {
   text-transform: none;
 }
 
-.form-section {
-  background: #fff;
-  border-radius: 20px;
-  padding: 22px 18px 20px;
-  margin-top: 8px;
-  box-shadow: 0 2px 10px rgba(34, 84, 34, 0.09);
-}
-
-.field {
-  margin-bottom: 16px;
-}
-
-.field label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #3d5a3d;
-  margin-bottom: 6px;
-  letter-spacing: 0.1px;
-}
-
-.required { color: #c2410c; }
-.optional { font-weight: 400; color: #8a9a8a; font-size: 12px; }
-
-.field input[type="text"],
-.field input[type="date"],
-.field textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 11px 14px;
-  border: 1.5px solid #d4ddd4;
-  border-radius: 12px;
-  font-size: 15px;
-  color: #1a3d1a;
-  background: #fafbfa;
-  outline: none;
-  font-family: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.field input:focus,
-.field textarea:focus {
-  border-color: #3a8a3a;
-  box-shadow: 0 0 0 3px rgba(58, 138, 58, 0.12);
-  background: #fff;
-}
-
-.field textarea {
-  resize: vertical;
-  min-height: 80px;
-  line-height: 1.5;
-}
-
-.field.error input,
-.field.error textarea {
-  border-color: #c2410c;
-}
-
-.error-msg {
-  display: block;
-  font-size: 12px;
-  color: #c2410c;
-  margin-top: 5px;
-}
-
-.category-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.cat-chip {
-  padding: 7px 14px;
-  border-radius: 50px;
-  border: 1.5px solid #c8d8c8;
-  background: #f5f8f5;
-  color: #4a6a4a;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
-  font-family: inherit;
-}
-
-.cat-chip.active {
-  border-color: currentColor;
-  font-weight: 700;
-}
-
-.submit-btn {
-  width: 100%;
-  margin-top: 4px;
-  padding: 15px;
-  background: linear-gradient(135deg, #3a8a3a, #2d6a2d);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  letter-spacing: 0.2px;
-  box-shadow: 0 4px 14px rgba(45, 106, 45, 0.35);
-  transition: transform 0.15s, box-shadow 0.15s;
-  font-family: inherit;
-}
-
-.submit-btn:active {
-  transform: scale(0.98);
-  box-shadow: 0 2px 6px rgba(45, 106, 45, 0.3);
-}
-
+/* ── Entry list ── */
 .list-section {
-  margin-top: 28px;
+  margin-top: 12px;
 }
 
 .entry-list {
@@ -486,5 +405,229 @@ function formatDate(iso: string) {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ── Header log button ── */
+.log-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #3a8a3a, #2d6a2d);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(45, 106, 45, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.log-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Modal overlay ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 30, 10, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90svh;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a3d1a;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.close-btn:hover {
+  background: #e0e0e0;
+}
+
+.modal-body {
+  overflow-y: auto;
+  padding: 18px 20px 8px;
+  flex: 1;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 20px 28px;
+  flex-shrink: 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.cancel-btn {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 1.5px solid #c8d8c8;
+  border-radius: 14px;
+  color: #4a6a4a;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.cancel-btn:hover {
+  background: #f5f8f5;
+}
+
+.submit-btn {
+  flex: 2;
+  padding: 14px;
+  background: linear-gradient(135deg, #3a8a3a, #2d6a2d);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 14px rgba(45, 106, 45, 0.3);
+  font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Form fields ── */
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3d5a3d;
+  margin-bottom: 6px;
+  letter-spacing: 0.1px;
+}
+
+.required { color: #c2410c; }
+.optional { font-weight: 400; color: #8a9a8a; font-size: 12px; }
+
+.field input[type="text"],
+.field input[type="date"],
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1.5px solid #d4ddd4;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #1a3d1a;
+  background: #fafbfa;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: #3a8a3a;
+  box-shadow: 0 0 0 3px rgba(58, 138, 58, 0.12);
+  background: #fff;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.field.error input {
+  border-color: #c2410c;
+}
+
+.error-msg {
+  display: block;
+  font-size: 12px;
+  color: #c2410c;
+  margin-top: 5px;
+}
+
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cat-chip {
+  padding: 7px 14px;
+  border-radius: 50px;
+  border: 1.5px solid #c8d8c8;
+  background: #f5f8f5;
+  color: #4a6a4a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.cat-chip.active {
+  border-color: currentColor;
+  font-weight: 700;
+}
+
+/* ── Modal transition ── */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
 }
 </style>
