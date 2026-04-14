@@ -28,7 +28,6 @@ const navItems = [
 <template>
   <div class="home">
     <div class="container">
-      <!-- Header -->
       <header class="header">
         <h1 class="title">Welcome to<br /><span class="brand">NaturExplorer</span></h1>
         <p class="subtitle">Step outside. Discover the wild.<br />Every walk is a new adventure.</p>
@@ -206,7 +205,6 @@ const navItems = [
   line-height: 1;
 }
 
-/* ── Footer / Account ── */
 .footer {
   padding-top: 28px;
   display: flex;

@@ -46,14 +46,12 @@ const events = [
   <div class="page">
     <div class="container">
 
-      <!-- Header -->
       <header class="page-header">
         <button class="back-btn" @click="router.push('/')" aria-label="Back to home">←</button>
         <h1 class="page-title">My Account</h1>
         <span class="header-spacer" />
       </header>
 
-      <!-- Profile -->
       <section class="profile-card">
         <div class="avatar">{{ profile.initials }}</div>
         <div class="profile-info">
@@ -67,7 +65,6 @@ const events = [
         </div>
       </section>
 
-      <!-- Species logs -->
       <section class="content-section">
         <div class="section-title-row">
           <h2 class="section-title">My Species Logs</h2>
@@ -84,7 +81,6 @@ const events = [
         </div>
       </section>
 
-      <!-- Events -->
       <section class="content-section">
         <h2 class="section-title">Upcoming Events</h2>
         <div class="event-list">
@@ -111,7 +107,6 @@ const events = [
 </template>
 
 <style scoped>
-/* ── Page shell ── */
 .page {
   min-height: 100svh;
   background: linear-gradient(160deg, #f5f0e8 0%, #ede8dc 50%, #e4ddd0 100%);
@@ -128,7 +123,6 @@ const events = [
   box-sizing: border-box;
 }
 
-/* ── Header ── */
 .page-header {
   display: flex;
   align-items: center;
@@ -172,7 +166,6 @@ const events = [
   flex-shrink: 0;
 }
 
-/* ── Profile card ── */
 .profile-card {
   display: flex;
   align-items: center;
@@ -242,7 +235,6 @@ const events = [
   background: #d0ddd0;
 }
 
-/* ── Section headings ── */
 .content-section {
   margin-bottom: 28px;
 }
@@ -256,7 +248,6 @@ const events = [
   text-transform: uppercase;
 }
 
-/* ── Photo scroll ── */
 .section-title-row {
   display: flex;
   align-items: center;
@@ -331,7 +322,6 @@ const events = [
   width: 120px;
 }
 
-/* ── Event cards ── */
 .event-list {
   display: flex;
   flex-direction: column;

@@ -58,14 +58,12 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   <div class="page">
     <div class="container">
 
-      <!-- Header -->
       <header class="page-header">
         <button class="back-btn" @click="router.push('/')" aria-label="Back to home">←</button>
         <h1 class="page-title">Today's Activities</h1>
         <span class="header-spacer" />
       </header>
 
-      <!-- Search -->
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
         <input
@@ -77,7 +75,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
         <button v-if="search" class="search-clear" @click="search = ''">✕</button>
       </div>
 
-      <!-- Filter chips -->
       <div class="filter-row">
         <button
           v-for="cat in categories"
@@ -90,7 +87,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
         </button>
       </div>
 
-      <!-- Activity list -->
       <div class="activity-list">
         <div
           v-for="activity in filtered"
@@ -99,14 +95,12 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
           :class="{ done: activity.checked }"
           @click="activity.checked = !activity.checked"
         >
-          <!-- Checkbox -->
           <div class="checkbox" :class="{ checked: activity.checked }">
             <svg v-if="activity.checked" viewBox="0 0 12 10" fill="none">
               <polyline points="1,5 4.5,8.5 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
 
-          <!-- Content -->
           <div class="card-body">
             <div class="card-top">
               <span class="card-title">{{ activity.title }}</span>
@@ -122,7 +116,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
           </div>
         </div>
 
-        <!-- Empty state -->
         <div v-if="filtered.length === 0" class="empty-state">
           <span class="empty-icon">🌿</span>
           <p>No activities match your search.</p>
@@ -134,7 +127,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
 </template>
 
 <style scoped>
-/* ── Page shell ── */
 .page {
   min-height: 100svh;
   background: linear-gradient(160deg, #f5f0e8 0%, #ede8dc 50%, #e4ddd0 100%);
@@ -248,7 +240,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   line-height: 1;
 }
 
-/* ── Filter chips ── */
 .filter-row {
   display: flex;
   gap: 8px;
@@ -283,7 +274,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   color: #fff;
 }
 
-/* ── Activity list ── */
 .activity-list {
   display: flex;
   flex-direction: column;
@@ -308,7 +298,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   opacity: 0.7;
 }
 
-/* ── Checkbox ── */
 .checkbox {
   flex-shrink: 0;
   width: 22px;
@@ -333,7 +322,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   height: 10px;
 }
 
-/* ── Card content ── */
 .card-body {
   flex: 1;
   min-width: 0;
@@ -383,7 +371,6 @@ const categoryStyle: Record<Category, { bg: string; color: string }> = {
   color: #8a9a8a;
 }
 
-/* ── Empty state ── */
 .empty-state {
   display: flex;
   flex-direction: column;

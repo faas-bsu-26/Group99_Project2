@@ -134,14 +134,12 @@ function formatDate(iso: string) {
   <div class="page">
     <div class="container">
 
-      <!-- Header -->
       <header class="page-header">
         <button class="back-btn" @click="router.push('/')" aria-label="Back to home">←</button>
         <h1 class="page-title">Log Species</h1>
         <button class="log-btn" @click="openModal">+ Log</button>
       </header>
 
-      <!-- Entry list -->
       <section class="list-section">
         <h2 class="section-title">
           Logged Sightings
@@ -176,7 +174,6 @@ function formatDate(iso: string) {
 
     </div>
 
-    <!-- Modal -->
     <Teleport to="body">
       <Transition name="modal">
         <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
@@ -268,7 +265,6 @@ function formatDate(iso: string) {
 </template>
 
 <style scoped>
-/* ── Page shell ── */
 .page {
   min-height: 100svh;
   background: linear-gradient(160deg, #f5f0e8 0%, #ede8dc 50%, #e4ddd0 100%);
@@ -285,7 +281,6 @@ function formatDate(iso: string) {
   box-sizing: border-box;
 }
 
-/* ── Header ── */
 .page-header {
   display: flex;
   align-items: center;
@@ -329,7 +324,6 @@ function formatDate(iso: string) {
   flex-shrink: 0;
 }
 
-/* ── Section heading ── */
 .section-title {
   font-size: 16px;
   font-weight: 700;
@@ -353,7 +347,6 @@ function formatDate(iso: string) {
   text-transform: none;
 }
 
-/* ── Entry list ── */
 .list-section {
   margin-top: 12px;
 }
@@ -468,7 +461,6 @@ function formatDate(iso: string) {
   overflow: hidden;
 }
 
-/* ── Header log button ── */
 .log-btn {
   padding: 8px 16px;
   background: linear-gradient(135deg, #3a8a3a, #2d6a2d);
@@ -488,7 +480,6 @@ function formatDate(iso: string) {
   transform: scale(0.97);
 }
 
-/* ── Modal overlay ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -598,7 +589,6 @@ function formatDate(iso: string) {
   transform: scale(0.98);
 }
 
-/* ── Form fields ── */
 .field {
   margin-bottom: 16px;
 }
@@ -681,7 +671,6 @@ function formatDate(iso: string) {
   font-weight: 700;
 }
 
-/* ── Modal transition ── */
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.2s ease;
