@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <button class="back" @click="router.push('/')">< Home</button>
+        <button class="back" @click="router.push('/')">&lt; Home</button>
         <h1>My Collection</h1>
         <div class="card" v-for="entry in entries" :key="entry.id">
             <h3>{{ entry.name }}</h3>
