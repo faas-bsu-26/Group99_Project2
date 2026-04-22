@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const categories: Category[] = ['Bird', 'Plant', 'Mammal', 'Insect', 'Reptile', 'Fungi', 'Other']
