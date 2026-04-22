@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
+const categories: Category[] = ['Bird', 'Plant', 'Mammal', 'Insect', 'Reptile', 'Fungi', 'Other']
+const todayISO = new Date().toISOString().split('T')[0]
 
 type Category = 'Bird' | 'Plant' | 'Mammal' | 'Insect' | 'Reptile' | 'Fungi' | 'Other'
 
@@ -15,11 +16,6 @@ interface SpeciesEntry {
   notes: string
   image: string
 }
-
-const categories: Category[] = ['Bird', 'Plant', 'Mammal', 'Insect', 'Reptile', 'Fungi', 'Other']
-
-const todayISO = new Date().toISOString().split('T')[0]
-
 let nextId = 5
 
 const entries = ref<SpeciesEntry[]>([
@@ -66,7 +62,6 @@ const sortedEntries = computed(() =>
 )
 
 const showModal = ref(false)
-
 const form = reactive({
   name: '',
   category: 'Bird' as Category,
@@ -75,24 +70,24 @@ const form = reactive({
   notes: '',
   image: '',
 })
-
 const errors = reactive({ name: false, location: false })
 
 function openModal() {
   showModal.value = true
+  nextTick(()=>{
+    const input = document.getElementById('species-name')
+    input?.focus()
+  })
 }
-
 function closeModal() {
   showModal.value = false
   errors.name = false
   errors.location = false
 }
-
 function submit() {
   errors.name = !form.name.trim()
   errors.location = !form.location.trim()
   if (errors.name || errors.location) return
-
   entries.value.push({
     id: nextId++,
     name: form.name.trim(),
@@ -131,23 +126,23 @@ function formatDate(iso: string) {
 </script>
 
 <template>
-  <div class="page">
+  <main class="page">
     <div class="container">
-
+<!-- header-->
       <header class="page-header">
         <button class="back-btn" @click="router.push('/')" aria-label="Back to home">←</button>
-        <h1 class="page-title">Log Species</h1>
+        <h1 class="page-title">Log Sighting</h1>
         <button class="log-btn" @click="openModal">+ Log</button>
       </header>
-
+<!-- list -->
       <section class="list-section">
-        <h2 class="section-title">
+        <h2 id="list-heading" class="section-title">
           Logged Sightings
           <span class="count-badge">{{ sortedEntries.length }}</span>
         </h2>
 
-        <div class="entry-list">
-          <div v-for="entry in sortedEntries" :key="entry.id" class="entry-card">
+        <ul class="entry-list">
+          <li v-for="entry in sortedEntries" :key="entry.id" class="entry-card">
             <div class="entry-image-wrap">
               <img v-if="entry.image" :src="entry.image" :alt="entry.name" class="entry-image" />
               <div v-else class="entry-image-placeholder">
@@ -168,12 +163,11 @@ function formatDate(iso: string) {
               </div>
               <p v-if="entry.notes" class="entry-notes">{{ entry.notes }}</p>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </section>
-
     </div>
-
+<!-- modal -->
     <Teleport to="body">
       <Transition name="modal">
         <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
@@ -183,7 +177,7 @@ function formatDate(iso: string) {
               <button class="close-btn" @click="closeModal" aria-label="Close">✕</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" @submit.prevent="submit">
               <div class="field" :class="{ error: errors.name }">
                 <label for="species-name">Species Name <span class="required">*</span></label>
                 <input
@@ -261,7 +255,7 @@ function formatDate(iso: string) {
         </div>
       </Transition>
     </Teleport>
-  </div>
+  </main>
 </template>
 
 <style scoped>
@@ -679,5 +673,11 @@ function formatDate(iso: string) {
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #3a8a3a;
+  outline-offset: 2px;
 }
 </style>
