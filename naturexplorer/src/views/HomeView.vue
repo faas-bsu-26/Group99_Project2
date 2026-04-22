@@ -1,47 +1,51 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
-
 const navItems = [
   {
     label: "Today's Activities",
     image: '/activities.png',
     route: '/activities',
-    description: "See what's happening today",
+    description: "See what events and experiences are happening today",
   },
   {
     label: 'Log Species',
     image: '/leaf.png',
     route: '/log-species',
-    description: 'Record a new sighting',
+    description: 'Record a new plant/animal sighting',
   },
   {
     label: 'Explore',
     image: '/map.png',
     route: '/explore',
-    description: 'Discover nearby nature',
+    description: 'Discover nearby nature trails and hotspots',
   },
 ]
 </script>
 
 <template>
-  <div class="home">
+  <main class="home">
     <div class="container">
+<!-- header-->
       <header class="header">
-        <h1 class="title">Welcome to<br /><span class="brand">NaturExplorer</span></h1>
+        <h1 class="title">Welcome to<br />
+          <span class="brand">NaturExplorer</span>
+        </h1>
         <p class="subtitle">Step outside. Discover the wild.<br />Every walk is a new adventure.</p>
       </header>
 
+<!-- navigation -->
       <nav class="nav">
+        <ul class="nav-list">
         <button
           v-for="item in navItems"
           :key="item.route"
           class="nav-btn"
           @click="router.push(item.route)"
+          :aria-label="item.label + ' - ' + item.description"
         >
           <span class="btn-icon">
-            <img :src="item.image" :alt="item.label" class="btn-icon-img" />
+            <img :src="item.image" :alt="item.label + ' icon'" class="btn-icon-img" />
           </span>
           <span class="btn-content">
             <span class="btn-label">{{ item.label }}</span>
@@ -49,8 +53,9 @@ const navItems = [
           </span>
           <span class="btn-arrow">›</span>
         </button>
+        </ul>
       </nav>
-
+<!-- footer -->
       <footer class="footer">
         <button class="account-btn" @click="router.push('/account')">
           <span class="account-icon">👤</span>
@@ -58,7 +63,7 @@ const navItems = [
         </button>
       </footer>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>
@@ -71,7 +76,6 @@ const navItems = [
   padding: 0 16px 32px;
   box-sizing: border-box;
 }
-
 .container {
   width: 100%;
   max-width: 480px;
@@ -79,12 +83,10 @@ const navItems = [
   flex-direction: column;
   min-height: 100svh;
 }
-
 .header {
   padding: 56px 8px 40px;
   text-align: center;
 }
-
 .title {
   font-size: 32px;
   font-weight: 700;
@@ -93,12 +95,10 @@ const navItems = [
   margin: 0 0 12px;
   letter-spacing: -0.5px;
 }
-
 .brand {
   color: #2d6a2d;
   font-size: 38px;
 }
-
 .subtitle {
   font-size: 16px;
   color: #4a7a4a;
@@ -106,14 +106,17 @@ const navItems = [
   margin: 0;
   font-weight: 400;
 }
-
 .nav {
+  flex: 1;
+}
+.nav-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  flex: 1;
 }
-
 .nav-btn {
   display: flex;
   align-items: center;
@@ -132,7 +135,6 @@ const navItems = [
   position: relative;
   overflow: hidden;
 }
-
 .nav-btn::before {
   content: '';
   position: absolute;
@@ -143,12 +145,10 @@ const navItems = [
   background: linear-gradient(180deg, #3a8a3a, #2d6a2d);
   border-radius: 18px 0 0 18px;
 }
-
 .nav-btn:active {
   transform: scale(0.98);
   box-shadow: 0 1px 4px rgba(34, 84, 34, 0.12);
 }
-
 @media (hover: hover) {
   .nav-btn:hover {
     background: #f5fbf5;
@@ -158,7 +158,6 @@ const navItems = [
     transform: translateY(-2px);
   }
 }
-
 .btn-icon {
   flex-shrink: 0;
   width: 44px;
@@ -188,29 +187,21 @@ const navItems = [
   font-size: 17px;
   font-weight: 600;
   color: #1a3d1a;
-  letter-spacing: -0.2px;
 }
-
 .btn-desc {
   font-size: 13px;
   color: #6a9a6a;
-  font-weight: 400;
 }
-
 .btn-arrow {
   font-size: 24px;
   color: #3a8a3a;
-  font-weight: 300;
   flex-shrink: 0;
-  line-height: 1;
 }
-
 .footer {
   padding-top: 28px;
   display: flex;
   justify-content: center;
 }
-
 .account-btn {
   display: flex;
   align-items: center;
@@ -224,24 +215,19 @@ const navItems = [
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
-  letter-spacing: 0.1px;
 }
-
 .account-btn:active {
   transform: scale(0.97);
 }
-
 @media (hover: hover) {
   .account-btn:hover {
     background: #2d6a2d;
     color: #ffffff;
   }
-
   .account-btn:hover .account-icon {
     filter: brightness(0) invert(1);
   }
 }
-
 .account-icon {
   font-size: 18px;
   transition: filter 0.15s ease;
