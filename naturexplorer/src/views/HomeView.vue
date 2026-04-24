@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const navItems = [
   {
-    label: "Today's Activities",
+    label: "Activities",
     image: '/activities.png',
     route: '/activities',
     description: "See what events and experiences are happening today",
